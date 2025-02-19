@@ -50,6 +50,11 @@
         <!--FIN DEL BOTON PARA VISUALIZAR EL PDF DE LA ORDEN DE TRABAJO-->
 
         <!--VISUALIZACION DE LA TABLA-->
+        <el-table-column label="O. Trabajo" sortable  width="120">
+          <template #default="scope">
+            {{ 'No. ' + this.formatDate(scope.row.id_orden) }}
+          </template>
+        </el-table-column>
         <el-table-column label="Nombre" sortable width="250">
           <template #default="scope">
             {{ scope.row.name+' '+scope.row.lastname1+' '+scope.row.lastname2 }}
