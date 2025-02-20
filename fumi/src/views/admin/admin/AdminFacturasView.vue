@@ -65,6 +65,18 @@
         <el-table-column prop="correo" label="Correo" sortable width="250" />
         <el-table-column prop="date2" label="F. Fumigacion" sortable width="150" />
         <el-table-column prop="pago" label="Monto" sortable width="auto" />
+        <el-table-column label="">
+          <template #default="scope">
+            <router-link :to="'/admin/works/edit-workFactComplete/'+scope.row.id">
+              <el-button style="color:black"
+                size="small"
+                type="warning"
+                @click="handleEdit()"
+                ><span class="material-symbols-outlined">edit</span></el-button
+              >
+            </router-link>
+          </template>
+        </el-table-column>
 
       </el-table>
     </div>
@@ -193,6 +205,7 @@ export default {
       this.selectedItem1 = row
       this.selectedItem1 = null
     },
+    handleEdit() {},
 
     filterData() {
     this.filteredData = this.tableData.filter((facturas) => {

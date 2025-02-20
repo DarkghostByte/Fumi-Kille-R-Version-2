@@ -112,7 +112,7 @@
             </el-button>
           </div>
           <div class="flex">
-            <el-table :data="filteredData1" :default-sort="{ prop: 'id', order: 'ascending' }" stripe
+            <el-table :data="filteredData1" :default-sort="{ prop: 'dateIngreso', order: 'ascending' }" stripe
               style="width:100%;">
               <el-table-column label="Fecha" prop="dateIngreso" width="120" sortable />
               <el-table-column label="Descripcion" prop="descriptionIngreso" width="150" sortable />
@@ -155,7 +155,7 @@
             </el-button>
           </div>
           <div class="flex">
-            <el-table :data="filteredData2" :default-sort="{ prop: 'id', order: 'ascending' }" stripe
+            <el-table :data="filteredData2" :default-sort="{ prop: 'dateEgresos', order: 'ascending' }" stripe
               style="width:100%;">
               <el-table-column label="Fecha" prop="dateEgresos" width="" sortable />
               <el-table-column label="Descripcion" prop="descriptionEgresos" width="" sortable />
@@ -213,13 +213,13 @@
               <el-radio-button label="Caja" value="Caja" />
               <el-radio-button label="Banco" value="Banco" />
               <el-radio-button label="Deposito" value="Deposito" />
-            </el-radio-group> 
+            </el-radio-group>
           </el-form-item>
-            <el-form-item prop="id_departamento1" label="Departamento:" class="px-2" style="width: auto;">
-              <el-select v-model="form2.id_departamento1" placeholder="Selecciona el departamento:">
-                <el-option v-for="selectDepartamento in departamentos" :key="selectDepartamento.id"
-                  :label="selectDepartamento.comercio" :value="selectDepartamento.id" />
-              </el-select>
+          <el-form-item prop="id_departamento1" label="Departamento:" class="px-2" style="width: auto;">
+            <el-select v-model="form2.id_departamento1" placeholder="Selecciona el departamento:">
+              <el-option v-for="selectDepartamento in departamentos" :key="selectDepartamento.id"
+                :label="selectDepartamento.comercio" :value="selectDepartamento.id" />
+            </el-select>
           </el-form-item>
           <el-form-item prop="dateEgresos" label="Fecha:">
             <el-col :span="11" style="width: 240px">
@@ -261,6 +261,13 @@ export default {
   name: 'AdminGastosComponent',
   data() {
     return {
+      formlimp: {
+        dateEgresos: '',
+        descriptionEgresos: '',
+        montoEgresos: '',
+        dataEgresos: '',
+        id_departamento1: '',
+      },
       dialogVisible: false,
       dialogVisibleView: false,
       url: process.env.VUE_APP_ROOT_ASSETS,
@@ -314,12 +321,15 @@ export default {
           { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
         ],
       },
+      
       form2: {
         dateEgresos: '',
         descriptionEgresos: '',
         montoEgresos: '',
         dataEgresos: '',
+        id_departamento1: '',
       },
+      
       rules2: {
         dateEgresos: [
           { required: true, message: 'La fecha es requerida', trigger: 'blur' },
@@ -347,22 +357,20 @@ export default {
   },
   methods: {
     formatDate(scope) {
-  if (scope.row.requiere3 === 'Pagado/Efectivo' || scope.row.requiere3 === 'Pagado/Banco') {
-    return `${scope.row.updated_at.slice(8, 10)}-${scope.row.updated_at.slice(5, 7)}-${scope.row.updated_at.slice(0, 4)}`;
-  }
-  return 'Sin pago';
-},
+      if (scope.row.requiere3 === 'Pagado/Efectivo' || scope.row.requiere3 === 'Pagado/Banco') {
+        return `${scope.row.updated_at.slice(8, 10)}-${scope.row.updated_at.slice(5, 7)}-${scope.row.updated_at.slice(0, 4)}`;
+      }
+      return 'Sin pago';
+    },
     parseDate(dateStr) {
       const [day, month, year] = dateStr.split('-');
       return new Date(year, month - 1, day);
     },
     sortByFormattedDate(a, b) {
-    const dateA = this.formatDate({ row: a });
-    const dateB = this.formatDate({ row: b });
-    return new Date(dateA) - new Date(dateB);
-  },
-    
-    
+      const dateA = this.formatDate({ row: a });
+      const dateB = this.formatDate({ row: b });
+      return new Date(dateA) - new Date(dateB);
+    },
     filterDate1() {
       if (this.selectedDate && this.selectedDate1) {
         const startDate = this.selectedDate;
@@ -424,7 +432,6 @@ export default {
       const url = `${this.url}api/pdfSaldoCaja/${this.selectedDate}/${this.selectedDate1}`;
       window.open(url, '_blank');
     },
-    
     generatePDFBanco() {
       const url = `${this.url}api/pdfBanco/${this.selectedDate}/${this.selectedDate1}`;
       window.open(url, '_blank');
@@ -445,7 +452,6 @@ export default {
       const url = `${this.url}api/pdfIngresosBanco/${this.selectedDate}/${this.selectedDate1}`;
       window.open(url, '_blank');
     },
-    
     refresh() {
       axios.get('ingresos')
         .then(res => {
@@ -542,6 +548,7 @@ export default {
                 message: 'Registro insertado correctamente',
                 type: 'success'
               });
+              this.resetForm1(); // Reset form1 after successful creation
             })
             .catch(error => {
               console.log(error);
@@ -578,6 +585,7 @@ export default {
                 message: 'Registro insertado correctamente',
                 type: 'success'
               });
+              this.resetForm2(); // Reset form2 after successful creation
             })
             .catch(error => {
               console.log(error);
@@ -598,6 +606,24 @@ export default {
           return false;
         }
       });
+    },
+    resetForm1() {
+      this.form1 = {
+        dateIngreso: '',
+        descriptionIngreso: '',
+        montoIngreso: '',
+        dataIngreso: '',
+        id_departamento1: '',
+      };
+    },
+    resetForm2() {
+      this.form2 = {
+        dateEgresos: '',
+        descriptionEgresos: '',
+        montoEgresos: '',
+        dataEgresos: '',
+        id_departamento1: '',
+      };
     },
     filterData1() {
       this.filteredData1 = this.tableData1.filter((ingresos) => {

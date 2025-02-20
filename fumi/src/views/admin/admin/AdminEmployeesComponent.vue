@@ -166,7 +166,7 @@ import { ElNotification } from 'element-plus';
 
 export default {
   name: 'AdminCologneComponent',
-  data: () => ({
+  data: () => ({  
     formRef: undefined,
     formEditRef: undefined,
     dialogVisible: false,
@@ -223,10 +223,17 @@ export default {
   },
   methods: {
     refresh() {
-      axios.get('empleados').then(res => {
-        this.tableData = res.data.data;
-        this.filteredData = this.tableData;
-      });
+  axios.get('empleados').then(res => {
+    console.log('Datos recibidos:', res.data.data); // Verifica los datos recibidos
+    if (res.data && res.data.data) {
+      this.tableData = res.data.data;
+      this.filteredData = this.tableData;
+    } else {
+      console.error('Datos recibidos son undefined o null');
+    }
+  }).catch(error => {
+    console.error('Error al obtener los datos:', error);
+  });
     },
 
     handleEdit(row) {
@@ -311,9 +318,9 @@ export default {
     },
 
     filterDataNameEmpleado() {
-      this.filteredData = this.tableData.filter((empleados) => {
-        return empleados.nameEmpleado.toLowerCase().includes(this.searchQueryNameEmpleado.toLowerCase());
-      });
+  this.filteredData = this.tableData.filter((empleados) => {
+    return empleados.nameEmpleado.toLowerCase().includes(this.searchQueryNameEmpleado.toLowerCase());
+  });
     },
 
     filterDataLastnameEmpleado1() {
