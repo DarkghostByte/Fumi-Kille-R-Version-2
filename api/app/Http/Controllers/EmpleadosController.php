@@ -9,17 +9,14 @@ use Validator;
 class EmpleadosController extends Controller
 {
     public function index()
-    {
-        $empleados = Empleados::all();
-        return response()->json($empleados);
-
-        $data = Empleados::select([
-            'empleados.*',
-            'comercios.comercio',
-        ])
-        ->join('comercios', 'empleados.id_departamento', '=', 'comercios.id')
-        ->orderBy('empleados.id', 'DESC')
-        ->get();
+{
+    $data = Empleados::select([
+        'empleados.*',
+        'comercios.comercio',
+    ])
+    ->join('comercios', 'empleados.id_departamento', '=', 'comercios.id')
+    ->orderBy('empleados.id', 'DESC')
+    ->get();
 
     return response()->json([
         'status' => 'success',

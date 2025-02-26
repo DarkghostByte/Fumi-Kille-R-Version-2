@@ -79,8 +79,8 @@
         <el-form :model="form1" label-width="auto" style="max-width: 100%" ref="formRef" :rules="rules"
           :label-position="'top'">
           <div class="row">
-            <el-form-item prop="ariasEmpleado" label="Alias:">
-              <el-input v-model="form1.ariasEmpleado" class="px-1" placeholder="Ingresa el alias del fumigador" />
+            <el-form-item prop="ariasEmpleado" label="Fumigador:">
+              <el-input v-model="form1.ariasEmpleado" class="px-1" placeholder="Ingresa el fumigador" />
             </el-form-item>
             <el-form-item prop="nameEmpleado" label="Nombre:">
               <el-input v-model="form1.nameEmpleado" class="px-1" placeholder="Ingresa el nombre" />
@@ -166,7 +166,7 @@ import { ElNotification } from 'element-plus';
 
 export default {
   name: 'AdminCologneComponent',
-  data: () => ({  
+  data: () => ({
     formRef: undefined,
     formEditRef: undefined,
     dialogVisible: false,
@@ -223,17 +223,10 @@ export default {
   },
   methods: {
     refresh() {
-  axios.get('empleados').then(res => {
-    console.log('Datos recibidos:', res.data.data); // Verifica los datos recibidos
-    if (res.data && res.data.data) {
-      this.tableData = res.data.data;
-      this.filteredData = this.tableData;
-    } else {
-      console.error('Datos recibidos son undefined o null');
-    }
-  }).catch(error => {
-    console.error('Error al obtener los datos:', error);
-  });
+      axios.get('empleados').then(res => {
+        this.tableData = res.data.data;
+        this.filteredData = this.tableData;
+      });
     },
 
     handleEdit(row) {
@@ -318,9 +311,9 @@ export default {
     },
 
     filterDataNameEmpleado() {
-  this.filteredData = this.tableData.filter((empleados) => {
-    return empleados.nameEmpleado.toLowerCase().includes(this.searchQueryNameEmpleado.toLowerCase());
-  });
+      this.filteredData = this.tableData.filter((empleados) => {
+        return empleados.nameEmpleado.toLowerCase().includes(this.searchQueryNameEmpleado.toLowerCase());
+      });
     },
 
     filterDataLastnameEmpleado1() {

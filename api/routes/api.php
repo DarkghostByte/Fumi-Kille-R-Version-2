@@ -36,6 +36,7 @@ use App\Http\Controllers\FormaContactoController;
 */
 
 Route::get('certificados', [CertificadoController::class, 'index']);
+Route::get('empleados', [App\Http\Controllers\EmpleadosController::class, 'index']);
 
 //RUTAS PARA CONSULTAS
 Route::resource('clientes', ClientesController::class);
