@@ -21,10 +21,8 @@
     <!-- Campo de búsqueda -->
     <div class="flex justify-between items-center mb-4" style="width: 100%;">
       <el-input class="px-2" placeholder="Buscar por nombre" v-model="searchQueryName" @input="filterData" />
-      <el-input class="px-2" placeholder="Buscar por apellido" v-model="searchQueryLastname"
-        @input="filterData" />
-      <el-input class="px-2" placeholder="Buscar por direccion" v-model="searchQueryAddress"
-        @input="filterData" />
+      <el-input class="px-2" placeholder="Buscar por apellido" v-model="searchQueryLastname" @input="filterData" />
+      <el-input class="px-2" placeholder="Buscar por direccion" v-model="searchQueryAddress" @input="filterData" />
       <el-input class="px-2" placeholder="Buscar por celular" v-model="searchQueryPhone" @input="filterData" />
     </div>
 
@@ -65,7 +63,8 @@
         </el-table-column>
         <el-table-column label="Dirección" sortable width="500">
           <template #default="scope">
-            {{ scope.row.ciudad + ', ' + scope.row.colonia + ' #' + scope.row.codigoPostal + ', ' + scope.row.home + '#' + scope.row.numAddress }}
+            {{ scope.row.ciudad + ', ' + scope.row.colonia + ' #' + scope.row.codigoPostal + ', ' + scope.row.home + '#'
+              + scope.row.numAddress }}
           </template>
         </el-table-column>
         <el-table-column prop="cell_phone" label="Numero Celular" sortable width="150" />
@@ -311,28 +310,28 @@ export default {
         const combinedLastname = clientes.lastname1.toLowerCase() + ' ' + clientes.lastname2.toLowerCase();
         const combinedAddress = clientes.ciudad.toLowerCase() + ' ' + clientes.colonia.toLowerCase() + ' ' + clientes.home.toLowerCase() + ' ' + clientes.codigoPostal.toLowerCase() + ' ' + clientes.numAddress.toLowerCase();
 
-    // Check each condition based on search queries
-    let shouldInclude = true; // Start with assuming inclusion
+        // Check each condition based on search queries
+        let shouldInclude = true; // Start with assuming inclusion
 
-    if (this.searchQueryName) {
-      shouldInclude = shouldInclude && clientes.name.toLowerCase().includes(this.searchQueryName.toLowerCase());
-    }
+        if (this.searchQueryName) {
+          shouldInclude = shouldInclude && clientes.name.toLowerCase().includes(this.searchQueryName.toLowerCase());
+        }
 
-    if (this.searchQueryLastname) {
-      shouldInclude = shouldInclude && combinedLastname.includes(this.searchQueryLastname.toLowerCase());
-    }
+        if (this.searchQueryLastname) {
+          shouldInclude = shouldInclude && combinedLastname.includes(this.searchQueryLastname.toLowerCase());
+        }
 
-    if (this.searchQueryAddress) {
-      shouldInclude = shouldInclude && combinedAddress.includes(this.searchQueryAddress.toLowerCase());
-    }
+        if (this.searchQueryAddress) {
+          shouldInclude = shouldInclude && combinedAddress.includes(this.searchQueryAddress.toLowerCase());
+        }
 
-    if (this.searchQueryPhone) {
-      shouldInclude = shouldInclude && clientes.cell_phone.toLowerCase().includes(this.searchQueryPhone.toLowerCase());
-    }
+        if (this.searchQueryPhone) {
+          shouldInclude = shouldInclude && clientes.cell_phone.toLowerCase().includes(this.searchQueryPhone.toLowerCase());
+        }
 
-    return shouldInclude;
-  });
-},
+        return shouldInclude;
+      });
+    },
 
     handleEstadoClick() {
       const newStatus = this.selectedItem.infoclient_delete === 'Alta' ? 'Baja' : 'Alta'; // Toggle status based on current value
