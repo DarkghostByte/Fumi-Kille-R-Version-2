@@ -1,36 +1,35 @@
 <template>
   <!-- Importar Iconos-->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <div>
     <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-start">
       <div class="flex flex-wrap items-start justify-end">
-        <router-link to="/admin/clients" class="inline-flex px-5 py-3 text-white bg-red-400 hover:bg-red-700 focus:bg-red-800 rounded-md ml-6 mb-3"
+        <router-link to="/admin/clients"
+          class="inline-flex px-5 py-3 text-white bg-red-400 hover:bg-red-700 focus:bg-red-800 rounded-md ml-6 mb-3"
           style="color:black">
-          <i class="fa fa-rotate-left" aria-hidden="true" style="margin-top: 5px; margin-left: -5px; margin-right:10px;"></i>
+          <i class="fa fa-rotate-left" aria-hidden="true"
+            style="margin-top: 5px; margin-left: -5px; margin-right:10px;"></i>
           Devolver
         </router-link>
       </div>
     </div>
     <div class="mr-6">
       <h1 class="text-4xl font-semibold mb-2">Orden de trabajo</h1>
-      <p style="font-size: 24px;"> Cliente: {{ form.name+' '+form.lastname1+' '+form.lastname2 }}</p>
+      <p style="font-size: 24px;"> Cliente: {{ form.name + ' ' + form.lastname1 + ' ' + form.lastname2 }}</p>
       <p style="font-size: 24px;">Negocio: {{ form.tradename }}</p>
 
     </div>
 
     <!-- DATOS DE LA FILA DE CLIENTES -->
-    
+
     <br>
     <!-- TABLE DATA -->
     <div class="flex ml-5">
-      <el-form
-        :model="form"
-        label-width="auto"
-        style="max-width: 100%"
-        :label-position="'top'"
-        ref="formRef"
+      <el-form :model="form" label-width="auto" style="max-width: 100%" :label-position="'top'" ref="formRef"
         :rules="rules">
-        
+
 
         <!-- FILA DE LAS DOSIS -->
         <p class="ordenDatos1">Dosis</p>
@@ -41,7 +40,7 @@
               <el-radio label="2da Dosis" value="2da Dosis" border />
               <el-radio label="3ra Dosis" value="3ra Dosis" border />
               <el-radio label="4ta Dosis" value="4ta Dosis" border />
-              <el-input v-model="form.nDosis" class="" placeholder="Ingresa el numero de dosis" style="width:250px;"/>
+              <el-input v-model="form.nDosis" class="" placeholder="Ingresa el numero de dosis" style="width:250px;" />
             </el-radio-group>
           </el-form-item>
         </div>
@@ -49,19 +48,17 @@
         <!-- FILA DE LAS PLAGAS (PROBLEMATICA) -->
         <p class="ordenDatos1">Problematica</p>
         <div class="flex" style="width:100%;">
-          <el-form-item prop="id_plague1" label="Problematica #1:" class="px-2"
-            style="width: 300px;">
+          <el-form-item prop="id_plague1" label="Problematica #1:" class="px-2" style="width: 300px;">
             <el-select v-model="form.id_plague1" filterable placeholder="Selecciona la problematica:">
-              <el-option v-for="problematicaBug in problematicas1" :key="problematicaBug.id" :label="problematicaBug.problematica"
-                :value="problematicaBug.id" />
+              <el-option v-for="problematicaBug in problematicas1" :key="problematicaBug.id"
+                :label="problematicaBug.problematica" :value="problematicaBug.id" />
             </el-select>
           </el-form-item>
 
-          <el-form-item prop="id_plague2" label="Problematica #2:" class="px-2"
-            style="width: 300px;">
+          <el-form-item prop="id_plague2" label="Problematica #2:" class="px-2" style="width: 300px;">
             <el-select v-model="form.id_plague2" filterable placeholder="Selecciona la problematica:">
-              <el-option v-for="problematicaBug2 in problematicas2" :key="problematicaBug2.id" :label="problematicaBug2.problematica"
-                :value="problematicaBug2.id" />
+              <el-option v-for="problematicaBug2 in problematicas2" :key="problematicaBug2.id"
+                :label="problematicaBug2.problematica" :value="problematicaBug2.id" />
             </el-select>
           </el-form-item>
         </div>
@@ -71,24 +68,14 @@
         <div class="flex">
           <el-form-item prop="date1" class="px-2" label="Fecha de orden:">
             <el-col :span="11" style="width: 220px">
-              <el-date-picker
-                v-model="form.date1"
-                type="date"
-                placeholder="Orden"
-                format="DD/MM/YYYY"
-                value-format="DD-MM-YYYY"
-              />
+              <el-date-picker v-model="form.date1" type="date" placeholder="Orden" format="DD/MM/YYYY"
+                value-format="DD-MM-YYYY" />
             </el-col>
           </el-form-item>
           <el-form-item prop="date2" class="px-7" label="Fecha para asistir:">
             <el-col :span="11" style="width: 220px">
-              <el-date-picker
-                v-model="form.date2"
-                type="date"
-                placeholder="Orden"
-                format="DD/MM/YYYY"
-                value-format="DD-MM-YYYY"
-              />
+              <el-date-picker v-model="form.date2" type="date" placeholder="Orden" format="DD/MM/YYYY"
+                value-format="DD-MM-YYYY" />
             </el-col>
           </el-form-item>
         </div>
@@ -98,28 +85,14 @@
         <div class="flex">
           <el-form-item prop="time1" class="px-2" label="De hora:">
             <el-col :span="11" style="width: 220px">
-              <el-time-select
-                v-model="form.time1"
-                style="width: 220px"
-                start="06:00"
-                step="00:15"
-                end="23:00"
-                format="hh:mm"
-                placeholder="Seleccionar hora"
-              />
+              <el-time-select v-model="form.time1" style="width: 220px" start="06:00" step="00:15" end="23:00"
+                format="hh:mm" placeholder="Seleccionar hora" />
             </el-col>
           </el-form-item>
           <el-form-item prop="time2" class="px-7" label="A hora:">
             <el-col :span="11" style="width: 220px">
-              <el-time-select
-                v-model="form.time2"
-                style="width: 220px"
-                start="06:00"
-                step="00:15"
-                end="23:00"
-                format="hh:mm"
-                placeholder="Seleccionar hora"
-              />
+              <el-time-select v-model="form.time2" style="width: 220px" start="06:00" step="00:15" end="23:00"
+                format="hh:mm" placeholder="Seleccionar hora" />
             </el-col>
           </el-form-item>
           <el-form-item prop="infoorden_cell" label="Hablar antes de ir?" class="px-10">
@@ -172,7 +145,8 @@
 
         <div style="color:white; display:flex; justify-content: center; transition:10s;">
           <el-form-item>
-            <el-button type="primary" @click="submitForm">Guardar</el-button>
+            <el-button type="primary" :disabled="isCreating" @click="submitForm">{{ isCreating ? 'Guardando...' :
+              'Guardar' }}</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -193,6 +167,7 @@ export default {
     uploadRef: undefined,
     url: process.env.VUE_APP_ROOT_ASSETS,
     urlApi: process.env.VUE_APP_ROOT_API,
+    isCreating: false,
     problematicas1: [],
     problematicas2: [],
     form: {
@@ -286,6 +261,7 @@ export default {
       this.$refs.formRef.validate((valid, fields) => {
         if (valid) {
           console.log(fields);
+          this.isCreating = true
           axios.post('orden', this.form).then(response => {
             this.successUpload(response);
           }).catch(error => {
@@ -295,6 +271,8 @@ export default {
               message: 'Favor de llenar los campos',
               type: 'error'
             });
+          }).finally(() => {
+            this.isCreating = false; // Habilitar el botón nuevamente
           });
         } else {
           console.log('Validation failed');
@@ -343,13 +321,14 @@ export default {
 </script>
 
 <style>
-.ordenCliente1{
-  font-size:28px;
-  font-weight:bold;
+.ordenCliente1 {
+  font-size: 28px;
+  font-weight: bold;
   text-transform: capitalize;
 }
-.ordenDatos1{
-  font-size:20px;
-  font-weight:bold;
+
+.ordenDatos1 {
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>

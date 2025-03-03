@@ -20,22 +20,17 @@
 
     <div class="mr-6">
       <h1 class="text-4xl font-semibold mb-2">Modificar orden de trabajo</h1>
-      <p class="ordenCliente"  >Cliente: {{ form.name+' '+form.lastname1+' '+form.lastname2 }}</p>
-      <p class="ordenCliente"  >Negocio: {{ form.tradename }}</p>
+      <p class="ordenCliente">Cliente: {{ form.name + ' ' + form.lastname1 + ' ' + form.lastname2 }}</p>
+      <p class="ordenCliente">Negocio: {{ form.tradename }}</p>
     </div>
 
     <!-- DATOS DE LA FILA DE CLIENTES -->
-    
+
     <br>
     <!-- TABLE INSERT -->
     <!-- TABLE DATA -->
     <div class="flex ml-5">
-      <el-form
-        :model="form"
-        label-width="auto"
-        style="max-width: 100%"
-        :label-position="'top'"
-        ref="formRef"
+      <el-form :model="form" label-width="auto" style="max-width: 100%" :label-position="'top'" ref="formRef"
         :rules="rules">
 
         <!-- FILA DE LAS DOSIS -->
@@ -47,7 +42,7 @@
               <el-radio label="2da Dosis" value="2da Dosis" border />
               <el-radio label="3ra Dosis" value="3ra Dosis" border />
               <el-radio label="4ta Dosis" value="4ta Dosis" border />
-              <el-input v-model="form.nDosis" class="" placeholder="Ingresa el numero de dosis" style="width:250px;"/>
+              <el-input v-model="form.nDosis" class="" placeholder="Ingresa el numero de dosis" style="width:250px;" />
             </el-radio-group>
           </el-form-item>
         </div>
@@ -55,19 +50,17 @@
         <!-- FILA DE LAS PLAGAS (PROBLEMATICA) -->
         <p class="ordenDatos">Problematica</p>
         <div class="flex" style="width:100%;">
-          <el-form-item prop="id_plague1" label="Problematica #1:" class="px-2"
-            style="width: 300px;">
+          <el-form-item prop="id_plague1" label="Problematica #1:" class="px-2" style="width: 300px;">
             <el-select v-model="form.id_plague1" filterable placeholder="Selecciona la problematica:">
-              <el-option v-for="problematicaBug in problematicas1" :key="problematicaBug.id" :label="problematicaBug.problematica"
-                :value="problematicaBug.id" />
+              <el-option v-for="problematicaBug in problematicas1" :key="problematicaBug.id"
+                :label="problematicaBug.problematica" :value="problematicaBug.id" />
             </el-select>
           </el-form-item>
 
-          <el-form-item prop="id_plague2" label="Problematica #2:" class="px-2"
-            style="width: 300px;">
+          <el-form-item prop="id_plague2" label="Problematica #2:" class="px-2" style="width: 300px;">
             <el-select v-model="form.id_plague2" filterable placeholder="Selecciona la problematica:">
-              <el-option v-for="problematicaBug2 in problematicas2" :key="problematicaBug2.id" :label="problematicaBug2.problematica"
-                :value="problematicaBug2.id" />
+              <el-option v-for="problematicaBug2 in problematicas2" :key="problematicaBug2.id"
+                :label="problematicaBug2.problematica" :value="problematicaBug2.id" />
             </el-select>
           </el-form-item>
         </div>
@@ -77,24 +70,14 @@
         <div class="flex">
           <el-form-item prop="date1" class="px-2" label="Fecha de orden:">
             <el-col :span="11" style="width: 220px">
-              <el-date-picker
-                v-model="form.date1"
-                type="date"
-                placeholder="Orden"
-                format="DD/MM/YYYY"
-                value-format="DD-MM-YYYY"
-              />
+              <el-date-picker v-model="form.date1" type="date" placeholder="Orden" format="DD/MM/YYYY"
+                value-format="DD-MM-YYYY" />
             </el-col>
           </el-form-item>
           <el-form-item prop="date2" class="px-7" label="Fecha para asistir:">
             <el-col :span="11" style="width: 220px">
-              <el-date-picker
-                v-model="form.date2"
-                type="date"
-                placeholder="Orden"
-                format="DD/MM/YYYY"
-                value-format="DD-MM-YYYY"
-              />
+              <el-date-picker v-model="form.date2" type="date" placeholder="Orden" format="DD/MM/YYYY"
+                value-format="DD-MM-YYYY" />
             </el-col>
           </el-form-item>
         </div>
@@ -104,28 +87,14 @@
         <div class="flex">
           <el-form-item prop="time1" class="px-2" label="De hora:">
             <el-col :span="11" style="width: 220px">
-              <el-time-select
-                v-model="form.time2"
-                style="width: 220px"
-                start="06:00"
-                step="00:15"
-                end="21:30"
-                format="HH:mm"
-                placeholder="Seleccionar hora"
-              />
+              <el-time-select v-model="form.time2" style="width: 220px" start="06:00" step="00:15" end="21:30"
+                format="HH:mm" placeholder="Seleccionar hora" />
             </el-col>
           </el-form-item>
           <el-form-item prop="time2" class="px-7" label="A hora:">
             <el-col :span="11" style="width: 220px">
-              <el-time-select
-                v-model="form.time2"
-                style="width: 220px"
-                start="06:00"
-                step="00:15"
-                end="21:30"
-                format="HH:mm"
-                placeholder="Seleccionar hora"
-              />
+              <el-time-select v-model="form.time2" style="width: 220px" start="06:00" step="00:15" end="21:30"
+                format="HH:mm" placeholder="Seleccionar hora" />
             </el-col>
           </el-form-item>
           <el-form-item prop="infoorden_cell" label="Hablar antes de ir?" class="px-10">
@@ -178,7 +147,8 @@
 
         <div style="color:white; display:flex; justify-content: center; transition:10s;">
           <el-form-item>
-            <el-button type="primary" @click="updateDatos">Modificar</el-button>
+            <el-button type="primary" :disabled="isCreating" @click="updateDatos">{{ isCreating ? 'Actualizando...' :
+              'Actualizar' }}</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -201,6 +171,7 @@ export default {
     uploadRef: undefined,
     url: process.env.VUE_APP_ROOT_ASSETS,
     urlApi: process.env.VUE_APP_ROOT_API,
+    isCreating: false,
     problematicas1: [],
     problematicas2: [],
     form: {
@@ -312,7 +283,7 @@ export default {
       console.error('route.params.id is undefined');
     }
   },
-  
+
   methods: {
     refresh() {
       this.tableData = []
@@ -321,6 +292,7 @@ export default {
       console.log('Datos enviados:', this.form)
       console.log(response)
       this.refresh()
+      this.isCreating = true
       axios.patch('orden/' + this.id, this.form).then(response => {
         console.log('Form submitted successfully:', response.data)
         console.log(response)
@@ -337,7 +309,9 @@ export default {
           message: 'Favor de llenar los campos',
           type: 'error'
         })
-      })
+      }).finally(() => {
+        this.isCreating = false; // Habilitar el botón nuevamente
+      });
     },
     updateDatos() {
       this.$refs.formRef.validate((valid, fields) => {
@@ -392,13 +366,14 @@ export default {
 </script>
 
 <style>
-.ordenCliente{
-  font-size:28px;
-  font-weight:bold;
+.ordenCliente {
+  font-size: 28px;
+  font-weight: bold;
   text-transform: capitalize;
 }
-.ordenDatos{
-  font-size:20px;
-  font-weight:bold;
+
+.ordenDatos {
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>
