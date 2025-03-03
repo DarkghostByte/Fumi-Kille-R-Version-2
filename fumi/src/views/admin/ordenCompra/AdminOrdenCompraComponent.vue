@@ -103,14 +103,7 @@
 
         <div class="flex">
           <el-form-item prop="empleadoOrdenCompra" label="Empleado:" class="px-5" style="width: 240px;">
-            <el-select v-model="form1.empleadoOrdenCompra" placeholder="Selecciona el Empleado">
-              <el-option
-                v-for="empleado in empleados"
-                :key="empleado.id"
-                :label="`${empleado.nameEmpleado} ${empleado.lastnameEmpleado1} ${empleado.lastnameEmpleado2}`"
-                :value="empleado.id">
-              </el-option>
-            </el-select>
+            <el-input v-model="form1.empleadoOrdenCompra" class="" placeholder="Ingresa el Empleado" />
           </el-form-item>
           <el-form-item prop="importeOrdenCompra" label="Importe:" class="px-5" style="width: 240px;">
             <el-input v-model="form1.importeOrdenCompra" class="" placeholder="Ingresa el Importe" />
@@ -119,14 +112,7 @@
 
         <div class="flex" style="margin-left:23%;">
           <el-form-item prop="autorizoOrdenCompra" label="Autorizo:" class="px-5" style="width: 240px;">
-            <el-select v-model="form1.autorizoOrdenCompra" placeholder="Quien lo Autorizo">
-              <el-option
-                v-for="option in autorizoOptions"
-                :key="option.value"
-                :label="option.label"
-                :value="option.value">
-              </el-option>
-            </el-select>
+            <el-input v-model="form1.autorizoOrdenCompra" class="" placeholder="Quien lo Autorizo" />
           </el-form-item>
         </div>
 
@@ -202,7 +188,7 @@
     <!-- MODAL 3 -->
     <el-dialog v-model="dialogVisibleEditOrdenCompra" title="Editar Orden De Compra" width="35%">
       <el-form :model="formEdit" label-width="auto" style="max-width: 100%" ref="formEditRef" :rules="rules" :label-position="'top'">
-        <p class="px-5">Datos de la orden de compraZ:</p>
+        <p class="px-5">Datos de la orden de compra:</p>
         <div class="flex">
           <el-form-item prop="fechaOrdenCompra" label="Fecha:" class="px-5" style="width: 240px;">
             <el-input v-model="formEdit.fechaOrdenCompra" class="px-1" placeholder="Ingresa la Fecha" />
@@ -232,14 +218,7 @@
 
         <div class="flex" style="margin-left:23%;">
           <el-form-item prop="autorizoOrdenCompra" label="Autorizo:" class="px-5" style="width: 240px;">
-            <el-select v-model="formEdit.autorizoOrdenCompra" placeholder="Quien lo Autorizo">
-              <el-option
-                v-for="option in autorizoOptions"
-                :key="option.value"
-                :label="option.label"
-                :value="option.value">
-              </el-option>
-            </el-select>
+            <el-input v-model="formEdit.autorizoOrdenCompra" class="" placeholder="Quien lo Autorizo" />
           </el-form-item>
         </div>
 
@@ -261,80 +240,71 @@ import axios from 'axios';
 import { ElNotification } from 'element-plus';
 
 export default {
-  name: 'AdminOrdenCompraComponent',
-  data() {
-    return {
-      url: process.env.VUE_APP_ROOT_ASSETS,
-      urlApi: process.env.VUE_APP_ROOT_API,
-      tableData: [],
-      selectedItem: null,
-      dialogVisible: false,
-      searchQueryName: '',
-      searchQueryAddress: '',
-      filteredData: [],
-      selectedDate: null,
-      selectedDate2: null,
-      dialogVisibleCreateOrdenCompra: false,
-      dialogVisibleEditOrdenCompra: false,
-      form1: {
-        fechaOrdenCompra: '',
-        paraOrdenCompra: '',
-        conceptoOrdenCompra: '',
-        detalleOrdenCompra: '',
-        empleadoOrdenCompra: '',
-        importeOrdenCompra: '',
-        autorizoOrdenCompra: '',
-      },
-      formEdit: {
-        fechaOrdenCompra: '',
-        paraOrdenCompra: '',
-        conceptoOrdenCompra: '',
-        detalleOrdenCompra: '',
-        empleadoOrdenCompra: '',
-        importeOrdenCompra: '',
-        autorizoOrdenCompra: '',
-      },
-      empleados: [], // Agregar la variable empleados
-      autorizoOptions: [
-        { value: 'CARLOS GONAZALES', label: 'CARLOS GONAZALES' },
-        { value: 'C.P. JENNY TRUJILLO', label: 'C.P. JENNY TRUJILLO' },
-        { value: '.               ', label: 'ESPACIO EN BLANCO' },
+  name: 'AdminWorksComponent',
+  data: () => ({
+    url: process.env.VUE_APP_ROOT_ASSETS,
+    urlApi: process.env.API,
+    tableData: [],
+    selectedItem: null,
+    dialogVisible: false,
+    searchQueryName: '',
+    searchQueryAddress: '',
+    filteredData: [],
+    selectedDate: null,
+    selectedDate2: null,
+    dialogVisibleCreateOrdenCompra: false,
+    dialogVisibleEditOrdenCompra: false,
+    form1: {
+      fechaOrdenCompra: '',
+      paraOrdenCompra: '',
+      conceptoOrdenCompra: '',
+      detalleOrdenCompra: '',
+      empleadoOrdenCompra: '',
+      importeOrdenCompra: '',
+      autorizoOrdenCompra: '',
+    },
+    formEdit: {
+      fechaOrdenCompra: '',
+      paraOrdenCompra: '',
+      conceptoOrdenCompra: '',
+      detalleOrdenCompra: '',
+      empleadoOrdenCompra: '',
+      importeOrdenCompra: '',
+      autorizoOrdenCompra: '',
+    },
+    rules: {
+      fechaOrdenCompra: [
+        { required: true, message: 'La fecha es requerida', trigger: 'blur' },
+        { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
       ],
-      rules: {
-        fechaOrdenCompra: [
-          { required: true, message: 'La fecha es requerida', trigger: 'blur' },
-          { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
-        ],
-        paraOrdenCompra: [
-          { required: true, message: 'Este campo es requerido', trigger: 'blur' },
-          { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
-        ],
-        conceptoOrdenCompra: [
-          { required: true, message: 'Este campo es requerido', trigger: 'blur' },
-          { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
-        ],
-        detalleOrdenCompra: [
-          { required: true, message: 'Este campo es requerido', trigger: 'blur' },
-          { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
-        ],
-        empleadoOrdenCompra: [
-          { required: true, message: 'Este campo es requerido', trigger: 'blur' },
-          { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
-        ],
-        importeOrdenCompra: [
-          { required: true, message: 'Este campo es requerido', trigger: 'blur' },
-          { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
-        ],
-        autorizoOrdenCompra: [
-          { required: true, message: 'Este campo es requerido', trigger: 'blur' },
-          { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
-        ],
-      }
-    };
-  },
+      paraOrdenCompra: [
+        { required: true, message: 'Este campo es requerido', trigger: 'blur' },
+        { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
+      ],
+      conceptoOrdenCompra: [
+        { required: true, message: 'Este campo es requerido', trigger: 'blur' },
+        { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
+      ],
+      detalleOrdenCompra: [
+        { required: true, message: 'Este campo es requerido', trigger: 'blur' },
+        { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
+      ],
+      empleadoOrdenCompra: [
+        { required: true, message: 'Este campo es requerido', trigger: 'blur' },
+        { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
+      ],
+      importeOrdenCompra: [
+        { required: true, message: 'Este campo es requerido', trigger: 'blur' },
+        { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
+      ],
+      autorizoOrdenCompra: [
+        { required: true, message: 'Este campo es requerido', trigger: 'blur' },
+        { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
+      ],
+    }
+  }),
   mounted() {
     this.refresh();
-    this.fetchEmpleados(); // Llamar a la función para obtener los empleados
   },
   methods: {
     refresh() {
@@ -344,25 +314,19 @@ export default {
         this.filteredData = this.tableData;
       })
     },
-    fetchEmpleados() {
-      axios.get(`${this.urlApi}/empleados`)
-        .then(response => {
-          this.empleados = response.data;
-        })
-        .catch(error => {
-          console.error('Error fetching empleados:', error);
-        });
-    },
+
     pdf(row) {
       console.log(row)
       this.selectedItem = row
       this.selectedItem = null
     },
+
     handleEdit(row) {
       console.log(row);
       this.formEdit = row;
       this.dialogVisibleEditOrdenCompra = true;
     },
+
     completarOrden(row) {
       if (row && row.id) {
         console.log(row);
@@ -388,18 +352,21 @@ export default {
           console.error('Error al dar de baja la orden:', error.response.data);
         });
     },
+
     filterDataName() {
       this.filteredData = this.tableData.filter((orden) => {
         const combinedName = orden.name.toLowerCase() + ' ' + orden.lastname1.toLowerCase() + ' ' + orden.lastname2.toLowerCase();
         return combinedName.includes(this.searchQueryName.toLowerCase());
       });
     },
+
     filterDataAddress() {
       this.filteredData = this.tableData.filter((orden) => {
         const combinedAddress = orden.ciudad.toLowerCase() + ' ' + orden.colonia.toLowerCase() + ' ' + orden.home.toLowerCase() + ' ' + orden.codigoPostal.toLowerCase() + ' ' + orden.numAddress.toLowerCase();
         return combinedAddress.includes(this.searchQueryAddress.toLowerCase());
       });
     },
+
     filterData() {
       if (this.selectedDate) {
         // Filtra por la fecha seleccionada
@@ -427,6 +394,7 @@ export default {
         });
       }
     },
+
     filterData2() {
       if (this.selectedDate2) {
         // Filtra por la fecha seleccionada
@@ -454,6 +422,7 @@ export default {
         });
       }
     },
+
     submitForm() {
       this.$refs.formRef.validate((valid) => {
         if (valid) {
@@ -489,6 +458,7 @@ export default {
         }
       });
     },
+
     editOrdenCompra() {
       this.$refs.formEditRef.validate((valid) => {
         if (valid) {
@@ -498,7 +468,7 @@ export default {
               console.log(res);
               this.refresh();
               this.dialogVisibleEditOrdenCompra = false;
-              this.$message.success('Orden de compra actualizada exitosamente');
+              this.$message.success('Ciudad actualizada exitosamente');
               this.$refs.formEditRef.resetFields();
               ElNotification({
                 title: 'Alerta',
@@ -508,7 +478,7 @@ export default {
             })
             .catch(error => {
               console.log(error);
-              this.$message.error('Error al actualizar la orden de compra');
+              this.$message.error('Error al actualizar la ciudad');
               ElNotification({
                 title: 'Error',
                 message: 'Favor de verificar los datos',
@@ -517,6 +487,7 @@ export default {
             });
         } else {
           console.log('Validation failed, check form errors');
+          console.log('Validation failed');
           ElNotification({
             title: 'Error',
             message: 'Favor de llenar los campos',

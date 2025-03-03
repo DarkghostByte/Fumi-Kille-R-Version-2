@@ -13,14 +13,10 @@
         <table id="table" style="margin-top:20px;">
             <thead>
                 <tr id="cabezera">
-                    <th id="td1">Ingresos</th>
-                    <td id="td1"></td> 
-                    <td id="td1"></td>
-                    <td id="td1"></td>
-                    
+                <th style="width: 70px; text-align:left; font-size:bold;"   id="td1" colspan="4">INGRESOS</th> 
                 </tr>
                 <tr>
-                    <th>Fecha</th>
+                    <th style="width: 100px;">Fecha</th>
                     <th>Concepto</th>
                     <th>Monto</th>
                     <th></th>
@@ -30,8 +26,8 @@
                 <!-- @ foreach($data as $item)*/ -->
                     @foreach($data as $item)
                     <tr>
-                        <td>{{ $item->dateIngreso }}</td>
-                        <td>{{ $item->descriptionIngreso }}</td>
+                        <td >{{ $item->dateIngreso }}</td>
+                        <td style="text-align:left">{{ $item->descriptionIngreso }}</td>
                         <td class="pagosLbl">{{ number_format($item->montoIngreso, 2) }}</td>
                         <td></td>
                         
@@ -40,8 +36,8 @@
                     
                 @foreach($dataCO as $itemCo)
                     <tr>
-                        <td>{{ formatDate($itemCo) }}</td>
-                        <td>Fum.{{ ucwords(strtolower($itemCo->name))}} {{ ucwords(strtolower($itemCo->lastname1))}} {{ ucwords(strtolower($itemCo->lastname2))}}</td>
+                        <td class="fecha">{{ formatDate($itemCo) }}</td>
+                        <td style="text-align: left;">Fum.{{ ucwords(strtolower($itemCo->name))}} {{ ucwords(strtolower($itemCo->lastname1))}} {{ ucwords(strtolower($itemCo->lastname2))}}</td>
                         <td class="pagosLbl">{{ number_format($itemCo->pago, 2) }}</td>
                         <td></td>
                         
@@ -51,8 +47,8 @@
                 <tr id="fondoTotal"> 
                         <td></td>
                         <td></td>
-                        <td id="txt">Total</td>
-                        <td id="totalPagos"> {{ number_format($totalCaja, 2) }}</td>
+                        <td style="width: 80px;" id="txt">Total</td>
+                        <td style="width: 80px;" id="totalPagos"> {{ number_format($totalCaja, 2) }}</td>
                     </tr>
             </tbody>
         </table>
@@ -61,10 +57,10 @@
 
             <thead id="thead2">
                 <tr id="cabezera">
-                    <th id="td1">Egresos</th>
-                    <td id="td1"></td> 
-                    <td id="td1"></td>
-                    <td id="td1"></td>
+                    <th style="width: 70px; font-size:bold;" id="td1">EGRESOS</th>
+                    <td style="width: 300px;" id="td1"></td> 
+                    <td style="width: 80px;" id="td1"></td>
+                    <td style="width: 80px;" id="td1"></td>
                     
                 </tr>
                 <tr>
@@ -79,17 +75,17 @@
                 @foreach($dataEg as $itemEg)
                     <tr>
                         <td>{{ $itemEg->dateEgresos }}</td>
-                        <td>{{ $itemEg->descriptionEgresos }}</td>
+                        <td style="text-align: left;">{{ $itemEg->descriptionEgresos }}</td>
                         <td></td>
                         <td class="pagosLbl">{{ number_format($itemEg->montoEgresos, 2) }}</td>
                     </tr>
                 @endforeach
             <!-- @ endforeach -->
                 <tr id="fondoTotal2"> 
-                        <td></td>
+                        <td ></td>
                         <td id="txt">Total</td>
-                        <td></td>
-                        <td id="totalPagos"> {{ number_format($totalEgresos, 2) }}</td>
+                        <td style="width: 80px;" ></td>
+                        <td style="width: 80px;" id="totalPagos"> {{ number_format($totalEgresos, 2) }}</td>
                     </tr>
             </tbody>
         </table>
@@ -97,8 +93,8 @@
 <br>
         <table id="table3">
                 <tr id="fondoTotalNeto"> 
-                        <td id="td1"></td>
-                        <td id="td1"></td>
+                        <td style="width: 70px;" id="td1"></td>
+                        <td style="width: 300px;" id="td1"></td>
                         <td id="txt">Saldo neto</td>
                         <td id="totalPagos"> {{ number_format($totalSaldo, 2) }}</td>
                     </tr>
@@ -226,5 +222,6 @@ function formatDate($item) {
     #td2{
         width: 100px;
     }
+    
 </style>
 

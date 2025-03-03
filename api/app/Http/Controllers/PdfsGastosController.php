@@ -18,8 +18,11 @@ class PdfsGastosController extends Controller
    
     public function generarPDFIngreso($f1, $f2) {
         // Convertir las fechas a formato Y-m-d si no lo están
-        $f1 = Carbon::parse($f1)->format('Y-m-d');
-        $f2 = Carbon::parse($f2)->format('Y-m-d');
+        $f1up=$f1;
+        $f2up=$f2;
+        $f1up = Carbon::parse($f1)->startOfDay()->format('Y-m-d H:i:s');
+        $f2up = Carbon::parse($f2)->endOfDay()->format('Y-m-d H:i:s');
+        
 
         // Filtrar ingresos donde dataIngreso sea 'Caja' y dentro del rango de fechas
         $data = Ingresos::where('dataIngreso', 'Caja')
@@ -37,12 +40,12 @@ class PdfsGastosController extends Controller
         ->join('orden', 'completarordenes.id_orden', '=', 'orden.id')
         ->join('clientes', 'orden.id_cliente', '=', 'clientes.id')
         ->where('completarordenes.requiere3', 'Pagado/Efectivo')
-        ->whereBetween('orden.updated_at', [$f1, $f2])
+        ->whereBetween('orden.updated_at', [$f1up, $f2up])
         ->get();
 
         // Obtener la suma total de 'pago' de CompletarOrden donde requiere3 sea 'Pagado/Efectivo'
         $totalPagos = CompletarOrden::where('requiere3', 'Pagado/Efectivo')
-            ->whereBetween('updated_at', [$f1, $f2])
+            ->whereBetween('updated_at', [$f1up, $f2up])
             ->sum('pago');
 
         // Obtener la suma total de 'montoIngreso' de Ingresos donde dataIngreso sea 'Caja'
@@ -283,88 +286,110 @@ public function generarPDFEgreso($f1, $f2) {
         return $pdf->download('invoice.pdf');
     }
 
-   public function generarPDFSaldo2($f1, $f2) {
-    // Convertir las fechas a formato Y-m-d si no lo están
-    $f5=$f1;
-    $f6=$f2;
-    $f1 = Carbon::parse($f1)->format('Y-m-d');
-    $f2 = Carbon::parse($f2)->format('Y-m-d');
-
-
-    // Filtrar ingresos donde dataIngreso sea 'Caja' y dentro del rango de fechas
-    $data = Ingresos::where('dataIngreso', 'Caja')
-        ->whereBetween('dateIngreso', [$f1, $f2])
-        ->get();
-
-    // Filtrar órdenes de trabajo donde requiere3 sea 'Pagado/Efectivo' y dentro del rango de fechas
-    $dataCO = CompletarOrden::select([
-        'completarordenes.*',
-        'orden.updated_at as date1', // Usar updated_at como date1
-        'clientes.name',
-        'clientes.lastname1',
-        'clientes.lastname2',
-    ])
-    ->join('orden', 'completarordenes.id_orden', '=', 'orden.id')
-    ->join('clientes', 'orden.id_cliente', '=', 'clientes.id')
-    ->where('completarordenes.requiere3', 'Pagado/Efectivo')
-    ->whereBetween('orden.updated_at', [$f1, $f2]) // Filtrar por updated_at
-    ->get();
-
-    // Obtener la suma total de 'pago' de CompletarOrden
-    $totalPagos = CompletarOrden::where('requiere3', 'Pagado/Efectivo')
-        ->whereBetween('updated_at', [$f1, $f2]) // Filtrar por updated_at
-        ->sum('pago');
-
-    // Obtener la suma total de 'montoIngreso' de Ingresos
-    $totalIngresosAdicionales = Ingresos::where('dataIngreso', 'Caja')
-        ->whereBetween('dateIngreso', [$f5, $f6])
-        ->sum('montoIngreso');
-
-    $totalCaja = $totalPagos + $totalIngresosAdicionales;
-
-    $dataEg = Egresos::select([
-        'egresos.*',
-        'comercios.comercio',
-    ])
-    ->join('comercios', 'egresos.id_departamento1', '=', 'comercios.id')
-    ->where('dataEgresos', 'Caja')
-    ->whereBetween('dateEgresos', [$f5, $f6])
-    ->get();
-
-    $totalEgresos = Egresos::where('dataEgresos', 'Caja')
-        ->whereBetween('dateEgresos', [$f1, $f2])
-        ->sum('montoEgresos');
-
-    $totalSaldo = $totalCaja - $totalEgresos;
-
-    /* Imagen Del Logo */
-    $path = public_path('img/membretadoFumi.png');
-    $type = pathinfo($path, PATHINFO_EXTENSION);
-    $data_img = file_get_contents($path);
-    $base64 = 'data:image/'.$type.';base64,'.base64_encode($data_img);
-
-    // Definir la función formatDate
-    $formatDate = function($item) {
-        if ($item->requiere3 === 'Pagado/Efectivo' || $item->requiere3 === 'Pagado/Banco') {
-            return Carbon::parse($item->updated_at)->format('d-m-Y');
-        }
-        return 'Sin pago';
-    };
-
-    // Filtrar los datos de dataCO por la fecha formateada
-    $dataCO = $dataCO->filter(function($item) use ($f1, $f2, $formatDate) {
-        $formattedDate = $formatDate($item);
-        $date = Carbon::createFromFormat('d-m-Y', $formattedDate);
-        return $date->between(Carbon::createFromFormat('Y-m-d', $f1), Carbon::createFromFormat('Y-m-d', $f2));
-    });
-
-    // Pasar los datos a la vista
-    $pdf_data = compact('base64', 'data', 'dataCO', 'totalCaja', 'dataEg', 'totalEgresos', 'totalSaldo', 'formatDate', 'f1', 'f2');
-    $pdf = Pdf::loadView('reports.repoSaldoFilt', $pdf_data);
-
-    return $pdf->stream();
-}
+    public function generarPDFSaldo2($f1, $f2) {
+        // Convertir las fechas a formato Y-m-d H:i:s si no lo están
+        $f1up=$f1;
+        $f2up=$f2;
+        $f1up = Carbon::parse($f1)->startOfDay()->format('Y-m-d H:i:s');
+        $f2up = Carbon::parse($f2)->endOfDay()->format('Y-m-d H:i:s');
     
+        // Filtrar ingresos donde dataIngreso sea 'Caja' y dentro del rango de fechas
+        $data = Ingresos::where('dataIngreso', 'Caja')
+            ->where(function($query) use ($f1, $f2) {
+                $query->whereBetween('dateIngreso', [$f1, $f2])
+                      ->orWhere('dateIngreso', $f1)
+                      ->orWhere('dateIngreso', $f2);
+            })
+            ->get();
+    
+        // Filtrar órdenes de trabajo donde requiere3 sea 'Pagado/Efectivo' y dentro del rango de fechas
+        $dataCO = CompletarOrden::select([
+            'completarordenes.*',
+            'orden.date1',
+            'clientes.name',
+            'clientes.lastname1',
+            'clientes.lastname2',
+        ])
+        ->join('orden', 'completarordenes.id_orden', '=', 'orden.id')
+        ->join('clientes', 'orden.id_cliente', '=', 'clientes.id')
+        ->where('completarordenes.requiere3', 'Pagado/Efectivo')
+        ->where(function($query) use ($f1up, $f2up) {
+            $query->whereBetween('orden.updated_at', [$f1up, $f2up])
+                  ->orWhere('orden.updated_at', $f1up)
+                  ->orWhere('orden.updated_at', $f2up);
+        })
+        ->get();
+    
+        // Obtener la suma total de 'pago' de CompletarOrden donde requiere3 sea 'Pagado/Efectivo'
+        $totalPagos = CompletarOrden::where('requiere3', 'Pagado/Efectivo')
+        ->where(function($query) use ($f1up, $f2up) {
+            $query->whereBetween('updated_at', [$f1up, $f2up])
+                  ->orWhere('updated_at', $f1up)
+                  ->orWhere('updated_at', $f2up);
+        })
+        ->sum('pago');
+    
+        // Obtener la suma total de 'montoIngreso' de Ingresos
+        $totalIngresosAdicionales = Ingresos::where('dataIngreso', 'Caja')
+            ->where(function($query) use ($f1, $f2) {
+                $query->whereBetween('dateIngreso', [$f1, $f2])
+                      ->orWhere('dateIngreso', $f1)
+                      ->orWhere('dateIngreso', $f2);
+            })
+            ->sum('montoIngreso');
+    
+        $totalCaja = $totalPagos + $totalIngresosAdicionales;
+    
+        $dataEg = Egresos::select([
+            'egresos.*',
+            'comercios.comercio',
+        ])
+        ->join('comercios', 'egresos.id_departamento1', '=', 'comercios.id')
+        ->where('dataEgresos', 'Caja')
+        ->where(function($query) use ($f1, $f2) {
+            $query->whereBetween('dateEgresos', [$f1, $f2])
+                  ->orWhere('dateEgresos', $f1)
+                  ->orWhere('dateEgresos', $f2);
+        })
+        ->get();
+    
+        $totalEgresos = Egresos::where('dataEgresos', 'Caja')
+            ->where(function($query) use ($f1, $f2) {
+                $query->whereBetween('dateEgresos', [$f1, $f2])
+                      ->orWhere('dateEgresos', $f1)
+                      ->orWhere('dateEgresos', $f2);
+            })
+            ->sum('montoEgresos');
+    
+        $totalSaldo = $totalCaja - $totalEgresos;
+    
+        /* Imagen Del Logo */
+        $path = public_path('img/membretadoFumi.png');
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data_img = file_get_contents($path);
+        $base64 = 'data:image/'.$type.';base64,'.base64_encode($data_img);
+    
+        // Definir la función formatDate
+        $formatDate = function($item) {
+            if ($item->requiere3 === 'Pagado/Efectivo' || $item->requiere3 === 'Pagado/Banco') {
+                return Carbon::parse($item->updated_at)->format('d-m-Y');
+            }
+            return 'Sin pago';
+        };
+    
+        // Filtrar los datos de dataCO por la fecha formateada
+        $dataCO = $dataCO->filter(function($item) use ($f1, $f2, $formatDate) {
+            $formattedDate = $formatDate($item);
+            $date = Carbon::createFromFormat('d-m-Y', $formattedDate);
+            return $date->between(Carbon::parse($f1)->startOfDay(), Carbon::parse($f2)->endOfDay());
+        });
+    
+        // Pasar los datos a la vista
+        $pdf_data = compact('base64', 'data', 'dataCO', 'totalCaja', 'dataEg', 'totalEgresos', 'totalSaldo', 'formatDate', 'f1', 'f2');
+        $pdf = Pdf::loadView('reports.repoSaldoFilt', $pdf_data);
+    
+        return $pdf->stream();
+    }
 public function generarPDFBancoFilt($f1, $f2) {
     // Convertir las fechas a formato Y-m-d si no lo están
     $f1 = Carbon::parse($f1)->format('Y-m-d');

@@ -112,7 +112,7 @@
             </el-button>
           </div>
           <div class="flex">
-            <el-table :data="filteredData1" :default-sort="{ prop: 'dateIngreso', order: 'ascending' }" stripe
+            <el-table :data="filteredData1" :default-sort="{ prop: 'dateIngreso', order: 'descending' }" stripe
               style="width:100%;">
               <el-table-column label="Fecha" prop="dateIngreso" width="120" sortable />
               <el-table-column label="Descripcion" prop="descriptionIngreso" width="150" sortable />
@@ -457,12 +457,18 @@ export default {
         .then(res => {
           this.tableData1 = res.data.data;
           this.filteredData1 = this.tableData1;
+        })
+        .catch(error => {
+          this.handleError(error);
         });
 
       axios.get('egresos')
         .then(res => {
           this.tableData2 = res.data.data;
           this.filteredData2 = this.tableData2;
+        })
+        .catch(error => {
+          this.handleError(error);
         });
 
       axios.get('completarOrden')
@@ -470,6 +476,9 @@ export default {
           this.tableData3 = res.data.data;
           this.tableData3 = res.data.data.filter(row => row.requiere3 == 'Pagado/Efectivo' || row.requiere3 == 'Pagado/Banco');
           this.filteredData3 = this.tableData3;
+        })
+        .catch(error => {
+          this.handleError(error);
         });
     },
     handleHover(event) {
@@ -530,7 +539,7 @@ export default {
         console.log('Total Caja Egresos', this.totalCajaEgreso);
         console.log('Totales', responseTotalDinero.data);
       } catch (error) {
-        console.error('Error al obtener los datos:', error);
+        this.handleError(error);
       }
     },
     createIngreso() {
@@ -667,13 +676,24 @@ export default {
           this.departamentos = response.data; // Assuming the data structure is correct
         })
         .catch(error => {
-          console.error('Error fetching departamento:', error);
-          ElNotification({
-            title: 'Error',
-            message: 'Error al recuperar departamento',
-            type: 'error',
-          });
+          this.handleError(error);
         });
+    },
+    handleError(error) {
+      if (error.response && error.response.status === 429) {
+        ElNotification({
+          title: 'Error',
+          message: 'Demasiadas solicitudes. Por favor, inténtalo de nuevo más tarde.',
+          type: 'error',
+        });
+      } else {
+        ElNotification({
+          title: 'Error',
+          message: 'Ocurrió un error al obtener los datos.',
+          type: 'error',
+        });
+      }
+      console.error('Error:', error);
     },
   }
 };
