@@ -117,7 +117,7 @@
               <el-table-column label="Fecha" prop="dateIngreso" width="120" sortable />
               <el-table-column label="Descripcion" prop="descriptionIngreso" width="150" sortable />
               <el-table-column label="Caja/Banco" prop="dataIngreso" width="150" sortable />
-              <el-table-column label="Monto" prop="montoIngreso" width="150" sortable
+              <el-table-column label="Monto"  prop="montoIngreso" width="150" sortable text-align="right"
                 :formatter="(row) => formatNumber(row, 'montoIngreso')">
               </el-table-column>
             </el-table>
@@ -190,7 +190,7 @@
               placeholder="Ingresa la descripcion:" maxlength="100" show-word-limit />
           </el-form-item>
           <el-form-item prop="montoIngreso" label="Monto:" style="width: 240px;">
-            <el-input v-model="form1.montoIngreso" class="px-1" placeholder="Ingresa el monto:" type="number" />
+            <el-input v-model="form1.montoIngreso" class="px-1" placeholder="Ingresa el monto:" type="number" maxlength="9" />
           </el-form-item>
         </div>
       </el-form>

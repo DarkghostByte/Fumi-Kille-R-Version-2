@@ -145,6 +145,14 @@
                 </el-form-item>
               </div>
             </div>
+            <div class="flex" style="width: 100%;">
+              <el-form-item prop="id_departamento" label="Departamento:" class="px-2" style="width: 300px;">
+                <el-select v-model="formEdit.id_departamento" placeholder="Selecciona el departamento:">
+                  <el-option v-for="selectDepartamento in departamentos" :key="selectDepartamento.id"
+                    :label="selectDepartamento.comercio" :value="selectDepartamento.id" />
+                </el-select>
+              </el-form-item>
+            </div>
           </div>
         </el-form>
         <template #footer>
