@@ -154,7 +154,7 @@
         <div style="color:white; display:flex; justify-content: center; transition:10s;">
           <div style="color:white; display:flex; justify-content: center; transition:10s;">
             <el-form-item>
-              <el-button type="primary" @click="submitForm">Guardar</el-button>
+              <el-button type="primary" :disabled="isCreating" @click="submitForm">{{ isCreating ? 'Guardando...' : 'Guardar' }}</el-button>
               <el-button @click="resetForm">Reset</el-button>
             </el-form-item>
           </div>
@@ -176,6 +176,7 @@ export default {
     uploadRef: undefined,
     url: process.env.VUE_APP_ROOT_ASSETS,
     urlApi: process.env.VUE_APP_ROOT_API,
+    isCreating: false,
     ciudades: [],
     colonias: [],
     vias: [],
@@ -205,7 +206,6 @@ export default {
     filteredColonias: [],
     loadingColonias: false,
     rules: {
-
       name: [
         { required: true, message: 'El nombre es requerido', trigger: 'blur' },
         { min: 1, max: 100, message: 'Longitud debería ser 1 a 100', trigger: 'blur' }
@@ -278,6 +278,7 @@ export default {
     successUpload(response) {
       console.log(response)
       this.refresh()
+      this.isCreating = true; // Deshabilitar el botón
       axios.post('clientes', this.form1).then(response => {
         console.log('Form submitted successfully:', response.data)
         console.log(response)
@@ -295,6 +296,9 @@ export default {
           type: 'error'
         })
       })
+      .finally(() => {
+        this.isCreating = false; // Habilitar el botón nuevamente
+      });
     },
     submitForm() {
       this.$refs.formRef.validate((valid, fields) => {
