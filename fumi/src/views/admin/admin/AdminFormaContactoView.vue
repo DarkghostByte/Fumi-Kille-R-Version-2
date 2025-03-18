@@ -1,5 +1,4 @@
 <template>
-  <!-- Importar Iconos-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -7,7 +6,6 @@
   <div>
     <div class="container mx-auto px-4">
 
-      <!-- INICIO -->
       <div class="flex justify-between items-center mb-4">
         <h1 class="text-2xl font-semibold">Gestión de Formas de contacto</h1>
         <div class="py-3">
@@ -23,12 +21,8 @@
         </div>
       </div>
 
-      <!-- END INICIO -->
-
-      <!-- TABLE -->
       <div class="flex" style="justify-content: center;">
-        <el-table :data="filteredData" :default-sort="{ prop: 'name', order: 'descending' }" style="width: 40%" stripe>
-          <!--BOTON PARA VISUALIZAR EL PDF DE CERTIFICADO-->
+        <el-table :data="filteredData" :default-sort="{ prop: 'name', order: 'descending' }" style="width: 60%" stripe>
           <el-table-column label="">
             <template #default="scope">
               <el-button style="color:black" size="small" type="success" @click="pdf(scope.row)">
@@ -38,19 +32,18 @@
               </el-button>
             </template>
           </el-table-column>
-          <!--FIN DEL BOTON PARA VISUALIZAR EL PDF DE CERTIFICADO-->
-
-          <!--VISUALIZACION DE LA TABLA-->
           <el-table-column prop="formadeContacto" label="Forma de contacto" sortable width="auto" />
           <el-table-column prop="infodelete_Forma" label="Estado" sortable width="auto" />
-          <!--FIN DE LA VISUALIZACION DE LA TABLA-->
+          <el-table-column label="Acciones">
+            <template #default="scope">
+              <el-button size="small" type="primary" @click="handleEdit(scope.row)">Editar</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
-      <!-- END TABLE -->
-
-      <!-- MODAL 1 -->
       <el-dialog v-model="dialogVisibleCreate" title="Agregar nueva forma de contacto" width="20%">
-        <el-form :model="form1" label-width="auto" style="max-width: 100%" ref="formRef" :rules="rules" :label-position="'top'">
+        <el-form :model="form1" label-width="auto" style="max-width: 100%" ref="formRef" :rules="rules"
+          :label-position="'top'">
           <div class="row">
             <el-form-item prop="formadeContacto" label="Forma de contacto:">
               <el-input v-model="form1.formadeContacto" class="px-1" placeholder="Ingresa la forma de contacto" />
@@ -64,78 +57,23 @@
           </span>
         </template>
       </el-dialog>
-      <!-- END MODAL 1 -->
-
-      <!-- MODAL 2 -->
-      <el-dialog v-model="dialogVisibleView" title="Datos del cliente" width="600" height="500">
-        <div class="clientInfo">
-          <div class="details">
-            <i class="fa fa-user fa-2x iconInfo"></i>
-            <div>
-              <p>
-                <strong>Nombre completo:</strong> {{ selectedItem.name }} {{ selectedItem.lastname1 }} {{
-                  selectedItem.lastname2 }}
-              </p>
-              <p>
-                <strong>Nombre comercial:</strong> {{ selectedItem.tradename }}
-              </p>
-            </div>
+      <el-dialog v-model="dialogVisibleEdit" title="Editar forma de contacto" width="20%">
+        <el-form :model="editForm" label-width="auto" style="max-width: 100%" ref="editFormRef" :rules="rules"
+          :label-position="'top'">
+          <div class="row">
+            <el-form-item prop="formadeContacto" label="Forma de contacto:">
+              <el-input v-model="editForm.formadeContacto" class="px-1" placeholder="Ingresa la forma de contacto" />
+            </el-form-item>
           </div>
-          <div class="details">
-            <i class="fa fa-city fa-2x iconInfo"></i>
-            <div>
-              <p>
-                <strong>Domicilio:</strong> {{ selectedItem.street }} {{ selectedItem.home }} #{{
-                  selectedItem.numAddress
-                }},
-                {{
-                  selectedItem.colonia
-                }} #{{ selectedItem.codigoPostal }}, {{ selectedItem.ciudad }}
-              </p>
-              <p>
-                <strong>Tipo de lugar:</strong> {{ selectedItem.comercio }}
-              </p>
-            </div>
-          </div>
-          <div class="details">
-            <i class="fa fa-phone fa-2x iconInfo"></i>
-            <div>
-              <p>
-                <strong>Numero de celular:</strong> {{ selectedItem.cell_phone }}
-              </p>
-              <p>
-                <strong>Número fijo:</strong> {{ selectedItem.number_fixed_number }}
-              </p>
-            </div>
-          </div>
-          <div class="details">
-            <i class="fa fa-location-dot fa-2x iconInfo"></i>
-            <div>
-              <p>
-                <strong>Como llegar:</strong> {{ selectedItem.how_to_get }}
-              </p>
-              <p>
-                <strong>Descripcion:</strong> {{ selectedItem.description }}
-              </p>
-            </div>
-          </div>
-          <div class="details">
-            <i class="fa fa-file-contract fa-2x iconInfo"></i>
-            <div>
-              <p>
-                <strong>Tipo de contratación:</strong> {{ selectedItem.recruitment_data }}
-              </p>
-            </div>
-          </div>
-        </div>
+        </el-form>
         <template #footer>
-          <div class="dialog-footer">
-            <el-button type="primary" @click="dialogVisibleView = false">Listo</el-button>
-          </div>
+          <span class="dialog-footer">
+            <el-button @click="dialogVisibleEdit = false">Cancelar</el-button>
+            <el-button type="primary" @click="updateFormaContacto">Guardar</el-button>
+          </span>
         </template>
       </el-dialog>
-      <!-- END MODAL 2 -->
-    </div>
+      </div>
   </div>
 </template>
 
@@ -147,7 +85,13 @@ export default {
   data() {
     return {
       dialogVisibleCreate: false,
+      dialogVisibleEdit: false,
       form1: {
+        formadeContacto: '',
+        infodelete_Forma: 'Alta',
+      },
+      editForm: {
+        id: null,
         formadeContacto: '',
         infodelete_Forma: 'Alta',
       },
@@ -201,6 +145,44 @@ export default {
       axios.get('formaContacto').then(res => {
         this.tableData = res.data.data;
         this.filteredData = this.tableData;
+      });
+    },
+    handleEdit(row) {
+      this.editForm = { ...row };
+      this.dialogVisibleEdit = true;
+    },
+    updateFormaContacto() {
+      this.$refs.editFormRef.validate((valid) => {
+        if (valid) {
+          axios.put(`formaContacto/${this.editForm.id}`, this.editForm)
+            .then(res => {
+              console.log(res);
+              this.dialogVisibleEdit = false;
+              this.refresh();
+              this.$message.success('Forma de contacto actualizada exitosamente');
+              ElNotification({
+                title: 'Alerta',
+                message: 'Registro actualizado correctamente',
+                type: 'success'
+              });
+            })
+            .catch(error => {
+              console.log(error);
+              this.$message.error('Error al actualizar la forma de contacto');
+              ElNotification({
+                title: 'Error',
+                message: 'Favor de llenar los campos',
+                type: 'error'
+              });
+            });
+        } else {
+          console.log('Validation failed');
+          ElNotification({
+            title: 'Error',
+            message: 'Favor de llenar los campos',
+            type: 'error'
+          });
+        }
       });
     },
   },

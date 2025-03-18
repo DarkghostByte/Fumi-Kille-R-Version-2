@@ -2,25 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte Ingreso Banco</title>
+    <title>Reporte Ingresos Banco</title>
 </head>
 <body>
-    <img  class="membre" src="{{ $base64 }}" alt="">
+
     <div id="main-container">
-    <h2 style="position: absolute; margin-top: -50px; margin-left:275px;">Reporte de Ingreso Banco</h2>
-        <h2 style="font-size: 18px; position:absolute; margin-top:-15px; margin-left:240px;">De fecha {{ $f1 }} a fecha {{ $f2 }}</h2>
+    <h2 style="position: absolute; margin-top: -70px; margin-left:250px;">Reporte Ingresos Banco</h2>
+    <h2 style="font-size: 18px; position:absolute; margin-top:-30px; margin-left:150px;">De fecha {{ $f1 }} a fecha {{ $f2 }}</h2>
         <table id="table" style="margin-top:20px;">
 
             <thead>
-                <tr id="cabezera">
-                    <th id="td1">Ingresos Banco</th>
-                    <td id="td1"></td> 
-                    <td id="td1"></td>
-                    <td id="td1"></td>
-                    
+            <tr id="cabezera">
+                <th style="width: 70px; text-align:left; font-size:bold;"   id="td1" colspan="4">INGRESOS</th> 
                 </tr>
                 <tr>
-                    <th>Fecha</th>
+                <th style="width: 100px;">Fecha</th>
                     <th>Concepto</th>
                     <th>Monto</th>
                     <th></th>
@@ -30,8 +26,8 @@
                 <!-- @ foreach($data as $item)*/ -->
                     @foreach($data as $item)
                     <tr>
-                        <td>{{ $item->dateIngreso }}</td>
-                        <td>{{ $item->descriptionIngreso }}</td>
+                    <td >{{ $item->dateIngreso }}</td>
+                        <td style="text-align:left">{{ $item->descriptionIngreso }}</td>
                         <td class="pagosLbl">{{ number_format($item->montoIngreso, 2) }}</td>
                         <td></td>
                         
@@ -39,20 +35,20 @@
                 @endforeach
                     
                 @foreach($dataCO as $itemCo)
-                    <tr>
-                        <td>{{ formatDate($itemCo) }}</td>
-                        <td>Fum. {{ ucwords(strtolower($itemCo->name))}} {{ ucwords(strtolower($itemCo->lastname1))}} {{ ucwords(strtolower($itemCo->lastname2))}}</td>
+        <tr>
+        <td class="fecha">{{ formatDate($itemCo) }}</td>
+                        <td style="text-align: left;">Fum.{{ ucwords(strtolower($itemCo->name))}} {{ ucwords(strtolower($itemCo->lastname1))}} {{ ucwords(strtolower($itemCo->lastname2))}}</td>
                         <td class="pagosLbl">{{ number_format($itemCo->pago, 2) }}</td>
                         <td></td>
                         
-                    </tr>
-                @endforeach
+        </tr>
+    @endforeach
             <!-- @ endforeach -->
-                <tr id="fondoTotal"> 
+            <tr id="fondoTotal"> 
                         <td></td>
                         <td></td>
-                        <td id="txt">Total</td>
-                        <td id="totalPagos"> {{ number_format($totalCaja, 2) }}</td>
+                        <td style="width: 80px;" id="txt">Total</td>
+                        <td style="width: 80px;" id="totalPagos"> {{ number_format($totalCaja, 2) }}</td>
                     </tr>
             </tbody>
         </table>
@@ -72,10 +68,17 @@ function formatDate($item) {
 
 
 <style>
-    body{
-        font-family: Arial;
-        margin-left: -35px;
-    }
+    body {
+            margin-top: -40px;
+            font-family: Arial;
+            margin-left: -35px;
+            background-image: url("{{ $base64 }}");
+            background-repeat: no-repeat;
+            background-size: contain; /* Ajuste para mantener la imagen proporcional */
+            background-position: top -500px center; /* Ajuste para mover la imagen más arriba */
+            background-attachment: fixed; /* Fija la imagen mientras se hace scroll */
+            padding-top: 220px; /* Mantengo un poco de espacio para evitar que el contenido se superponga a la imagen */
+        }
     #main-container{
         
         margin:10px auto;

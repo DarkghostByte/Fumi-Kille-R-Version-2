@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte Saldo Caja</title>
+    <title>Reporte Saldo Cajaz</title>
 </head>
 <body>
     <img  class="membre" src="{{ $base64 }}" alt="">

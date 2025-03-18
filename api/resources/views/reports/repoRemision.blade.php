@@ -101,7 +101,7 @@
             <th class="clth113">IMPORTE:</th>
             <th class="renDivTh">
             <div class="renDiv13">
-                {{ $data->RemisionMonto }}
+                $ {{ $data->RemisionMonto }}
             </div>
             </th>
             
@@ -238,7 +238,7 @@
             <th class="clth113">IMPORTE:</th>
             <th class="renDivTh">
             <div class="renDiv13">
-                {{ $data->RemisionMonto }}
+                $ {{ $data->RemisionMonto }}
             </div>
             </th>
             

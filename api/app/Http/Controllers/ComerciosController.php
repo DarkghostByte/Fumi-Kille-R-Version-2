@@ -13,19 +13,11 @@ class ComerciosController extends Controller
      */
     public function index()
     {
-        $data = Comercio ::all();
+        $data = Comercio::all();
         return response()->json([
-            'status'=>'success',
-            'data'=>$data
+            'status' => 'success',
+            'data' => $data
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -33,44 +25,26 @@ class ComerciosController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $reglas = Validator::make($request->all(),[
+        $reglas = Validator::make($request->all(), [
             'comercio' => 'required|min:1',
             'infodelete_departamento' => 'required|min:1',
         ]);
-        if( $reglas -> fails()){
+        if ($reglas->fails()) {
             return response()->json([
-                'status'=>'failed',
-                'message'=> 'Validation Error',
+                'status' => 'failed',
+                'message' => 'Validation Error',
                 'error' => $reglas->errors()
-            ],201);
-        }else{
+            ], 201);
+        } else {
             $data = new Comercio();
             $data->comercio = $request->comercio;
             $data->infodelete_departamento = $request->infodelete_departamento;
             $data->save();
 
             return response()->json([
-                'status'=>'success'
+                'status' => 'success'
             ]);
-            
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -78,7 +52,34 @@ class ComerciosController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $reglas = Validator::make($request->all(), [
+            'comercio' => 'required|min:1',
+            'infodelete_departamento' => 'required|min:1',
+        ]);
+
+        if ($reglas->fails()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Validation Error',
+                'error' => $reglas->errors()
+            ], 201);
+        } else {
+            $comercio = Comercio::find($id);
+            if (!$comercio) {
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'Comercio not found'
+                ], 404);
+            }
+
+            $comercio->update($request->all());
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Comercio updated successfully',
+                'data' => $comercio
+            ]);
+        }
     }
 
     /**
@@ -87,10 +88,11 @@ class ComerciosController extends Controller
     public function destroy(string $id)
     {
         $data = Comercio::find($id);
-        if($data != null){
-            $data -> delete();
-        } return response()->json([
-            'status'=>'success'
+        if ($data != null) {
+            $data->delete();
+        }
+        return response()->json([
+            'status' => 'success'
         ]);
     }
 

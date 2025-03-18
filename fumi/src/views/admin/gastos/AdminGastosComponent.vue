@@ -372,60 +372,66 @@ export default {
       return new Date(dateA) - new Date(dateB);
     },
     filterDate1() {
-      if (this.selectedDate && this.selectedDate1) {
-        const startDate = this.selectedDate;
-        const endDate = this.selectedDate1;
-        const f1 = this.parseDate(startDate);
-        const f2 = this.parseDate(endDate);
+  // Verifica si ambas fechas están definidas (no son null o vacías)
+  if (this.selectedDate && this.selectedDate1) {
+    const startDate = this.selectedDate;
+    const endDate = this.selectedDate1;
 
-        if (f1 > f2) {
-          ElNotification({
-            title: 'Error',
-            message: 'La fecha de inicio debe ser anterior a la fecha final.',
-            type: 'error'
-          });
-          return;
-        }
+    const f1 = this.parseDate(startDate);
+    const f2 = this.parseDate(endDate);
 
-        this.filteredData1 = this.tableData1.filter(ingresos => {
-          const ingresoDate = this.parseDate(ingresos.dateIngreso);
-          return ingresoDate >= f1 && ingresoDate <= f2;
-        });
+    // Verifica si la fecha de inicio es mayor que la fecha final
+    if (f1 > f2) {
+      ElNotification({
+        title: 'Error',
+        message: 'La fecha de inicio debe ser anterior a la fecha final.',
+        type: 'error'
+      });
+      return;
+    }
 
-        this.filteredData2 = this.tableData2.filter(egresos => {
-          const egresoDate = this.parseDate(egresos.dateEgresos);
-          return egresoDate >= f1 && egresoDate <= f2;
-        });
+    // Filtra los datos de acuerdo con las fechas
+    this.filteredData1 = this.tableData1.filter(ingresos => {
+      const ingresoDate = this.parseDate(ingresos.dateIngreso);
+      return ingresoDate >= f1 && ingresoDate <= f2;
+    });
 
-        this.filteredData3 = this.tableData3.filter(completarOrden => {
-          const completarOrdenDate = this.parseDate(this.formatDate({ row: completarOrden }));
-          return completarOrdenDate >= f1 && completarOrdenDate <= f2;
-        });
+    this.filteredData2 = this.tableData2.filter(egresos => {
+      const egresoDate = this.parseDate(egresos.dateEgresos);
+      return egresoDate >= f1 && egresoDate <= f2;
+    });
 
-        // Show notification based on filtered data count
-        if (this.filteredData1.length === 0 && this.filteredData2.length === 0 && this.filteredData3.length === 0) {
-          ElNotification({
-            title: 'Aviso',
-            message: `No se encontraron datos para el rango de fechas seleccionado (${this.selectedDate} - ${this.selectedDate1}).`,
-            type: 'warning'
-          });
-        } else {
-          ElNotification({
-            title: 'Datos encontrados',
-            message: `Se encontraron datos para el rango de fechas seleccionado (${this.selectedDate} - ${this.selectedDate1}).`,
-            type: 'success'
-          });
-        }
-      } else {
-        // If no dates are selected or only one is selected, show all data
-        this.filteredData1 = this.tableData1;
-        this.filteredData2 = this.tableData2;
-        this.filteredData3 = this.tableData3;
-        ElNotification({
-          title: 'Mostrando todos los datos',
-          message: 'Se están mostrando todos los datos de la agenda.',
-          type: 'info'
-        });
+    this.filteredData3 = this.tableData3.filter(completarOrden => {
+      const completarOrdenDate = this.parseDate(this.formatDate({ row: completarOrden }));
+      return completarOrdenDate >= f1 && completarOrdenDate <= f2;
+    });
+
+    // Notificación si no se encuentran datos para las fechas seleccionadas
+    if (this.filteredData1.length === 0 && this.filteredData2.length === 0 && this.filteredData3.length === 0) {
+      ElNotification({
+        title: 'Aviso',
+        message: `No se encontraron datos para el rango de fechas seleccionado (${this.selectedDate} - ${this.selectedDate1}).`,
+        type: 'warning'
+      });
+    } else {
+      ElNotification({
+        title: 'Datos encontrados',
+        message: `Se encontraron datos para el rango de fechas seleccionado (${this.selectedDate} - ${this.selectedDate1}).`,
+        type: 'success'
+      });
+    }
+
+  } else {
+    // Si alguna de las fechas está vacía, muestra todos los datos
+    this.filteredData1 = this.tableData1;
+    this.filteredData2 = this.tableData2;
+    this.filteredData3 = this.tableData3;
+
+    ElNotification({
+      title: 'Mostrando todos los datos',
+      message: 'Se están mostrando todos los datos de la agenda.',
+      type: 'info'
+    });
       }
     },
     generatePDFCaja() {
