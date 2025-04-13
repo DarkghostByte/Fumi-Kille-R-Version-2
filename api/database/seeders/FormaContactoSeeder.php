@@ -14,17 +14,6 @@ class FormaContactoSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('formaContacto')->insert([
-            'formadeContacto'=>'Barda',
-            'infodelete_Forma'=>'Alta',
-        ]);
-        DB::table('formaContacto')->insert([
-            'formadeContacto'=>'Facebook',
-            'infodelete_Forma'=>'Alta',
-        ]);
-        DB::table('formaContacto')->insert([
-            'formadeContacto'=>'Telefono',
-            'infodelete_Forma'=>'Alta',
-        ]);
+        
     }
 }

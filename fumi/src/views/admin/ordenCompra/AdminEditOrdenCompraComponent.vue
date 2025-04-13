@@ -128,6 +128,9 @@ export default {
     }
   }),
   mounted() {
+    if(!localStorage.getItem("token")){
+      this.$router.push("/auth/index");
+    }
     this.refresh();
     const route = useRoute();
     this.id = route.params.id;

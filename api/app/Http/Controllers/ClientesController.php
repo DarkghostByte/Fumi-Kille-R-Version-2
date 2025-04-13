@@ -19,11 +19,11 @@ class ClientesController extends Controller
         'colonias.colonia',
         'colonias.codigoPostal', 
         'vias.tipoVia',
-        'formaContacto.formadeContacto',])
+        'formacontacto.formadeContacto',])
         ->join('ciudades', 'clientes.id_city', '=', 'ciudades.id')
         ->join('colonias', 'clientes.id_colonia', '=', 'colonias.id')
         ->join('vias', 'clientes.id_vias', '=', 'vias.id')
-        ->join('formaContacto', 'clientes.contact_form', '=', 'formaContacto.id')
+        ->join('formacontacto', 'clientes.contact_form', '=', 'formacontacto.id')
         ->orderBy('clientes.id', 'DESC')
         ->get();
 

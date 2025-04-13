@@ -210,6 +210,9 @@ export default {
     selectedDate2: null,
   }),
   mounted() {
+    if(!localStorage.getItem("token")){
+      this.$router.push("/auth/index");
+    }
     this.refresh();
   },
   methods: {

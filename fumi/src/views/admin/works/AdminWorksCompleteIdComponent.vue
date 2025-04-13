@@ -114,6 +114,9 @@ export default {
   }),
 
   mounted() {
+    if(!localStorage.getItem("token")){
+      this.$router.push("/auth/index");
+    }
     this.refresh();
     this.refresh1();
     this.refresh2();

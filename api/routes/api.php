@@ -23,6 +23,7 @@ use App\Http\Controllers\FacturasController;
 use App\Http\Controllers\PdfsGastosController;
 use App\Http\Controllers\ordenComprasController;
 use App\Http\Controllers\FormaContactoController;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,8 @@ use App\Http\Controllers\FormaContactoController;
 
 Route::get('certificados', [CertificadoController::class, 'index']);
 Route::get('empleados', [App\Http\Controllers\EmpleadosController::class, 'index']);
+Route::get('/users', [UsersController::class, 'getUsersJson']);
+Route::post('/login', [UsersController::class, 'login']);
 
 //RUTAS PARA CONSULTAS
 Route::resource('clientes', ClientesController::class);

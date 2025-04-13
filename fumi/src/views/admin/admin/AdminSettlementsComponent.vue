@@ -32,7 +32,7 @@
           <el-table-column label="Acciones">
             <template #default="scope">
               <el-button size="small" type="primary" @click="handleEdit(scope.row)">
-                Modificar
+                <span class="material-symbols-outlined">edit</span>
               </el-button>
             </template>
           </el-table-column>
@@ -108,6 +108,9 @@ export default {
     }
   }),
   mounted() {
+    if(!localStorage.getItem("token")){
+      this.$router.push("/auth/index");
+    }
     this.refresh();
   },
   methods: {

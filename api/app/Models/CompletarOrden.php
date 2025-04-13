@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CompletarOrden extends Model
 {
     use HasFactory;
-    protected $table= "completarOrdenes";
+    protected $table= "completarordenes";
 
     protected $fillable = [
         'id_orden',

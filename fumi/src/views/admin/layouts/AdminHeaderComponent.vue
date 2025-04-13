@@ -1,4 +1,6 @@
 <template>
+
+
   <!--
 
     <header class="flex items-center h-20 px-6 sm:px-10 bg-white">
@@ -27,10 +29,13 @@
       </header>
 
   -->
-    
+    <div>ff</div>
 </template>
 <script>
+
     export default{
         name:'AdminHeaderComponent'
     }
+
+    
 </script>

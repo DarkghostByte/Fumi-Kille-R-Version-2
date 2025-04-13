@@ -102,7 +102,7 @@ nav:hover {
 
 
 <script>
-import { debounce } from 'lodash';
+
 
 export default {
   name: 'AdminAsideComponent',
@@ -118,15 +118,7 @@ export default {
     },
   },
   mounted() {
-  const resizeObserver = new ResizeObserver(debounce(entries => {
-    entries.forEach(entry => {
-      if (entry.target === this.$el && window.innerWidth <= 768) { // Adjust breakpoint as needed
-        this.isExpanded = false;
-      }
-    });
-  }, 200));
-
-  resizeObserver.observe(this.$el);
+  
 }
 };
 </script>

@@ -243,7 +243,9 @@ export default {
     },
 
   },
-  mounted() {
+  mounted() {if(!localStorage.getItem("token")){
+      this.$router.push("/auth/index");
+    }
     this.fetchProductosInternos();
     this.fetchProductosExternos();
     this.fetchEmpleados();

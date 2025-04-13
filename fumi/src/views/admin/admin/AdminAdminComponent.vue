@@ -170,6 +170,9 @@ export default {
     totalOrdenCompra: 0,
   }),
   mounted() {
+    if(!localStorage.getItem("token")){
+      this.$router.push("/auth/index");
+    }
     this.refresh(),
       this.fetchData();
   },

@@ -22,21 +22,6 @@ class EmpleadosSeeder extends Seeder
             'infodelete_Empleados'=>'Alta',
             'id_departamento'=>'1',
         ]);
-        DB::table('empleados')->insert([
-            'nameEmpleado'=>'Jesus Liadeo',
-            'lastnameEmpleado1'=>'Chavez',
-            'lastnameEmpleado2'=>'Chavez',
-            'ariasEmpleado'=>'JCC',
-            'infodelete_Empleados'=>'Alta',
-            'id_departamento'=>'1',
-        ]);
-        DB::table('empleados')->insert([
-            'nameEmpleado'=>'Luis Angel',
-            'lastnameEmpleado1'=>'Peña',
-            'lastnameEmpleado2'=>'Mora',
-            'ariasEmpleado'=>'LPM',
-            'infodelete_Empleados'=>'Alta',
-            'id_departamento'=>'2',
-        ]);
+        
     }
 }

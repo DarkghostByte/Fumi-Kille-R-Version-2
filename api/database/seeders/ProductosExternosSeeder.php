@@ -14,21 +14,6 @@ class ProductosExternosSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('productosExternos')->insert([
-            'productoExt'=>'No aplica',
-            'infodelete_productoExt'=>'Alta',
-        ]); 
-        DB::table('productosExternos')->insert([
-            'productoExt'=>'Producto #1',
-            'infodelete_productoExt'=>'Alta',
-        ]);
-        DB::table('productosExternos')->insert([
-            'productoExt'=>'Producto #2',
-            'infodelete_productoExt'=>'Alta',
-        ]);
-        DB::table('productosExternos')->insert([
-            'productoExt'=>'Producto #3',
-            'infodelete_productoExt'=>'Alta',
-        ]);  
+        
     }
 }

@@ -93,6 +93,9 @@ searchQueryPhone:'',
     today: new Date().toISOString().slice(0, 10),
   }),
   mounted() {
+    if(!localStorage.getItem("token")){
+      this.$router.push("/auth/index");
+    }
     this.refresh()
   },
   methods: {

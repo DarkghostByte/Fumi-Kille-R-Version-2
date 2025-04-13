@@ -36,7 +36,9 @@
           <el-table-column prop="infodelete_Forma" label="Estado" sortable width="auto" />
           <el-table-column label="Acciones">
             <template #default="scope">
-              <el-button size="small" type="primary" @click="handleEdit(scope.row)">Editar</el-button>
+              <el-button size="small" type="primary" @click="handleEdit(scope.row)">
+                <span class="material-symbols-outlined">edit</span>
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -187,6 +189,9 @@ export default {
     },
   },
   mounted() {
+    if(!localStorage.getItem("token")){
+      this.$router.push("/auth/index");
+    }
     this.refresh();
   },
 };

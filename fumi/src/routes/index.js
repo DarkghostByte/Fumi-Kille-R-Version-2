@@ -1,10 +1,14 @@
-import * as VueRouter from 'vue-router'
+import { createWebHashHistory,createRouter } from 'vue-router'
 import LoginComponent from '@/views/auth/LoginComponent.vue'
-
+import ErrorComponent from '@/views/admin/home/ErrorComponent.vue'
+import AdminHomeComponent from '@/views/admin/home/AdminHomeComponent.vue'
+import AdminClientsComponent from '@/views/admin/clients/AdminClientsComponent.vue'
+import AdminLayoutComponent from '@/views/admin/layouts/AdminLayoutComponent.vue'
 const adminRoutes = [
-    {path: 'home', component: () => import('@/views/admin/home/AdminHomeComponent.vue')},
+    {path: '', component: AdminHomeComponent},
+    {path: 'home',  component: AdminHomeComponent},
 
-    {path: 'clients', component: () => import('@/views/admin/clients/AdminClientsComponent.vue')},
+    {path: 'clients', component: AdminClientsComponent},
     {path: 'clients/agregarComercio-clients', component: () => import('@/views/admin/clients/AdminAddClientsComponent.vue')},
     {path: 'clients/agregarParticular-clients', component: () => import('@/views/admin/clients/AdminAddParticularClientsComponent.vue')},
     {path: 'clients/edit-clients/:id', component: () => import('@/views/admin/clients/AdminEditClientsComponent.vue')},
@@ -60,21 +64,24 @@ const adminRoutes = [
     {path: 'ordenCompra', component: () => import('@/views/admin/ordenCompra/AdminOrdenCompraComponent.vue')},
     {path: 'ordenCompra/new', component: () => import('@/views/admin/ordenCompra/AdminAddOrdenCompraComponent.vue')},
     {path: 'ordenCompra/edit/:id', component: () => import('@/views/admin/ordenCompra/AdminEditOrdenCompraComponent.vue')},
+    {path :':patchMatch(.*)*',component:ErrorComponent},   
 ]
 
 
 const routes =[
+    {path: '/', component: () => import('@/views/admin/home/IndexComponent.vue')},
     {path :'/auth/index',name :'index',component:LoginComponent},
+    {path: '/test',  component: AdminHomeComponent},
+    {path: '/home',  component: AdminHomeComponent},
+    {path: '/clients', component: AdminClientsComponent},
 
-    {path:'/admin',name:'admin-home',
-    component: import('@/views/admin/layouts/AdminLayoutComponent.vue'),
-    children: adminRoutes
-    },
+    {path:'/admin',name:'admin-home', component: AdminLayoutComponent, children: adminRoutes },
+    {path :'/:patchMatch(.*)*',component:ErrorComponent},
 
 ]
 
-const router = VueRouter.createRouter({
-    history:VueRouter.createWebHistory(),
+const router = createRouter({
+   history: createWebHashHistory(),
     routes
 })
 export default router

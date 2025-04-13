@@ -130,6 +130,9 @@ export default {
   }),
 
   mounted() {
+    if(!localStorage.getItem("token")){
+      this.$router.push("/auth/index");
+    }
     this.refresh();
   },
   methods: {

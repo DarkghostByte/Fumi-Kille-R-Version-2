@@ -1,5 +1,11 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
-  transpileDependencies: true
+  transpileDependencies: true,
+  productionSourceMap:true,
+  configureWebpack: {
+    optimization:{
+      //minimize: false
+    }
+  },
 })
 
